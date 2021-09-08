@@ -65,6 +65,9 @@ module.exports = {
           // artifactName: `${config.productName}.dmg`,
           icon: './public/icons/256x256.png'
         },
+        linux: {
+          icon: './public/icons/256x256.png'
+        },
         nsis: {
           // 创建一键安装程序还是辅助安装程序
           oneClick: false,
@@ -78,6 +81,10 @@ module.exports = {
           artifactName: `${config.productName}-Setup-V${config.version}.exe`,
           // 完成后是否运行已安装的应用程序。对于辅助安装程序，相应的复选框将被删除
           runAfterFinish: true,
+          // 创建桌面图标
+          createDesktopShortcut: true,
+          // 创建开始菜单图标
+          createStartMenuShortcut: true,
           // 用于所有快捷方式的名称。默认为应用程序名称，即 productName 的值，如果 productName 没有设置，则默认是 package.json 中的 name，如果name 也没有设置，将报错
           shortcutName: `${config.productName}`
         }

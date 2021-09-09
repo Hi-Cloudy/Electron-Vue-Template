@@ -7,7 +7,24 @@
     <router-view />
   </div>
 </template>
+<script>
+export default {
+  data () {
+    return {}
+  },
+  mounted () {
+    // renderer
+    window.addEventListener('contextmenu', (e) => {
+      e.preventDefault()
+      window.api.send('show-context-menu')
+    })
 
+    window.api.receive('context-menu-command', (data) => {
+      console.log(data)
+    })
+  }
+}
+</script>
 <style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

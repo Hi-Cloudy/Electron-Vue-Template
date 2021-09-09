@@ -31,8 +31,9 @@ module.exports = {
   },
   pluginOptions: {
     electronBuilder: {
-      // 渲染进程可以使用node模块
-      nodeIntegration: true,
+      // 渲染进程默认禁止使用node模块
+      nodeIntegration: false,
+      preload: './src/electron/preload.js',
       builderOptions: {
         asar: false,
         productName: `${config.productName}`, // 项目、exe的名称

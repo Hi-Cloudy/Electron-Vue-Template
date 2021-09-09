@@ -1,24 +1,31 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, Menu, globalShortcut } from 'electron'
+import { app, protocol, BrowserWindow, globalShortcut } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
+const path = require('path')
+const menuBuilder = require('./electron/menu')
+const ipc = require('./electron/ipc')
+
 // import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 let win = null
 
 // Scheme must be registered before the app is ready
+// https://www.electronjs.org/docs/api/protocol#protocolregisterschemesasprivilegedcustomschemes
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
 
 async function createWindow () {
+  // https://www.electronjs.org/docs/tutorial/security#3-enable-context-isolation-for-remote-content
   // Create the browser window.
   win = new BrowserWindow({
     width: 1200,
     height: 700,
     webPreferences: {
-      webSecurity: false, // 取消跨域限制
+      preload: path.join(__dirname, 'preload.js'),
+      // webSecurity: true, // 开启跨域限制
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       // 在渲染进程使用 node 模块,ELECTRON_NODE_INTEGRATION对应 vue.config.js 中的 nodeIntegration 属性
@@ -38,7 +45,7 @@ async function createWindow () {
       *     let win = new BrowserWindow({ width: 800, height: 600 })
       *     win.loadURL('https://github.com')
       */
-      enableRemoteModule: true
+      enableRemoteModule: false
       // fullscreen: true,
       // skipTaskbar: false,
       // fullscreenable: true,
@@ -53,16 +60,15 @@ async function createWindow () {
   win.setMenu(null)
 
   // 全屏时不能挡住下方任务栏
-  win.maximize()
+  // win.maximize()
   // 全屏时可以挡住下方任务栏
   // win.setFullScreen(true)
 
   // 注册菜单
-  createMenu()
+  menuBuilder.createMenu()
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
-
     // process.env.WEBPACK_DEV_SERVER_URL对应本地启动服务的url地址，如：http://localhost:8080
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
     // if (!process.env.IS_TEST) win.webContents.openDevTools()
@@ -71,6 +77,10 @@ async function createWindow () {
     // Load the index.html when not in development
     win.loadURL('app://./index.html')
   }
+  // 将 win 置为 null，释放占用内存
+  win.on('closed', () => {
+    win = null
+  })
 }
 
 // Quit when all windows are closed.
@@ -112,31 +122,6 @@ app.on('ready', async () => {
   createWindow()
 })
 
-/**
- * 设置菜单栏
- */
-function createMenu () {
-  // darwin表示macOS，针对macOS的设置
-  if (process.platform === 'darwin') {
-    const template = [
-      {
-        label: 'APP',
-        submenu: [
-          {
-            role: 'about'
-          },
-          {
-            role: 'quit'
-          }]
-      }]
-    const menu = Menu.buildFromTemplate(template)
-    Menu.setApplicationMenu(menu)
-  } else {
-    // windows及linux系统
-    Menu.setApplicationMenu(null)
-  }
-}
-
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
   if (process.platform === 'win32') {
@@ -151,3 +136,5 @@ if (isDevelopment) {
     })
   }
 }
+// 注册IPC监听
+ipc.registerMessage()

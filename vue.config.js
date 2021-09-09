@@ -39,6 +39,12 @@ module.exports = {
         productName: `${config.productName}`, // 项目、exe的名称
         appId: 'com.tomato.template', // 应用程序id
         copyright: 'Copyright © 2021 Tomato', // 应用程序版权行
+        publish: [
+          {
+            provider: 'generic', // 可为github
+            url: 'http://127.0.0.1:8080/'
+          }
+        ],
         directories: {
           output: 'dist_electron' // 打包输出的目录，相对于项目根路径
         },
@@ -50,7 +56,7 @@ module.exports = {
           target: [
             {
               target: 'nsis', // 目标包类型
-              arch: ['ia32'] // 属于X86体系结bai构的du32位版本
+              arch: ['ia32'] // ia32:属于X86体系结构的du32位版本, x64:64位版本
             }
           ],
           // 没有配置 nsis 的时候的安装包名，此配置项会被 nsis 覆盖
@@ -64,7 +70,11 @@ module.exports = {
         dmg: {
           title: `${config.productName}`,
           // artifactName: `${config.productName}.dmg`,
-          icon: './public/icons/256x256.png'
+          icon: './public/icons/256x256.png',
+          contents: [
+            { x: 410, y: 150, type: 'link', path: '/Applications' },
+            { x: 130, y: 150, type: 'file' }
+          ]
         },
         linux: {
           icon: './public/icons/256x256.png'

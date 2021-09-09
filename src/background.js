@@ -1,7 +1,8 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, globalShortcut } from 'electron'
+import { app, protocol, BrowserWindow, globalShortcut, screen } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
+import { autoUpdater } from 'electron-updater'
 const path = require('path')
 const menuBuilder = require('./electron/menu')
 const ipc = require('./electron/ipc')
@@ -18,11 +19,15 @@ protocol.registerSchemesAsPrivileged([
 ])
 
 async function createWindow () {
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize
+
   // https://www.electronjs.org/docs/tutorial/security#3-enable-context-isolation-for-remote-content
   // Create the browser window.
   win = new BrowserWindow({
-    width: 1200,
-    height: 700,
+    // width: 1200,
+    // height: 700,
+    width: width / 2,
+    height: height / 1.2,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       // webSecurity: true, // 开启跨域限制
@@ -105,7 +110,7 @@ app.on('ready', async () => {
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools
     try {
-      // 开发环境下注册快捷键，切换打开 开发者工具
+      // 开发环境下注册快捷键，切换 开发者工具
       // 在windows下，按Ctrl + Shift + i即可打开devTools
       // 在macOS下，按Commond + Shift + i即可打开devTools
       globalShortcut.register('CommandOrControl+Shift+i', function () {
@@ -118,8 +123,9 @@ app.on('ready', async () => {
       console.error('Vue Devtools failed to install:', e.toString())
     }
   }
-
   createWindow()
+  // 自动更新
+  autoUpdater.checkForUpdatesAndNotify()
 })
 
 // Exit cleanly on request from parent process in development mode.

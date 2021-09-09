@@ -34,6 +34,7 @@ contextBridge.exposeInMainWorld('api', {
     }
   }
 })
+// https://stackoverflow.com/questions/55164360/with-contextisolation-true-is-it-possible-to-use-ipcrenderer/59675116#59675116
 
 // document.addEventListener('DOMNodeInserted', (event) => {
 //   // 页面内容加载之前

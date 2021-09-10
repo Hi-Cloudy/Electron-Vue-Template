@@ -20,9 +20,9 @@ const flatten = (obj) => Object.keys(obj)
       })
    */
 contextBridge.exposeInMainWorld('electron', {
-  ipcRenderer: ipcRenderer,
+  // ipcRenderer: ipcRenderer,
   send: (channel, data) => {
-    const validChannels = ['toMain', 'show-context-menu']
+    const validChannels = ['toMain', 'show-context-menu', 'ondragstart']
     if (validChannels.includes(channel)) {
       ipcRenderer.send(channel, data)
     }
@@ -32,6 +32,9 @@ contextBridge.exposeInMainWorld('electron', {
     if (validChannels.includes(channel)) {
       ipcRenderer.on(channel, (event, ...args) => func(...args))
     }
+  },
+  startDrag: (fileName) => {
+    ipcRenderer.send('ondragstart', fileName)
   }
 })
 // https://stackoverflow.com/questions/55164360/with-contextisolation-true-is-it-possible-to-use-ipcrenderer/59675116#59675116

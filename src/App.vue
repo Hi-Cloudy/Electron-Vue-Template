@@ -4,6 +4,7 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </div>
+    <div @dragstart="dragStart" style="border:2px solid black;border-radius:3px;padding:5px;display:inline-block" draggable="true">Drag me</div>
     <router-view />
   </div>
 </template>
@@ -22,6 +23,12 @@ export default {
     window.electron.receive('context-menu-command', (data) => {
       console.log(data)
     })
+  },
+  methods: {
+    dragStart (event) {
+      event.preventDefault()
+      window.electron.startDrag('app.png')
+    }
   }
 }
 </script>

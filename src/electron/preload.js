@@ -13,13 +13,13 @@ const flatten = (obj) => Object.keys(obj)
    *  renderer中使用方式
       window.addEventListener('contextmenu', (e) => {
         e.preventDefault()
-        window.api.send('show-context-menu')
+        window.electron.send('show-context-menu')
       })
-      window.api.receive('context-menu-command', (data) => {
+      window.electron.receive('context-menu-command', (data) => {
         console.log(data)
       })
    */
-contextBridge.exposeInMainWorld('api', {
+contextBridge.exposeInMainWorld('electron', {
   ipcRenderer: ipcRenderer,
   send: (channel, data) => {
     const validChannels = ['toMain', 'show-context-menu']

@@ -16,10 +16,10 @@ export default {
     // renderer
     window.addEventListener('contextmenu', (e) => {
       e.preventDefault()
-      window.api.send('show-context-menu')
+      window.electron.send('show-context-menu')
     })
 
-    window.api.receive('context-menu-command', (data) => {
+    window.electron.receive('context-menu-command', (data) => {
       console.log(data)
     })
   }

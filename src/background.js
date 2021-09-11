@@ -2,7 +2,8 @@
 
 import { app, protocol, BrowserWindow, globalShortcut, screen } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
-import { autoUpdater } from 'electron-updater'
+import { SCHEME, LOAD_URL } from './electron/config'
+// import { autoUpdater } from 'electron-updater'
 const path = require('path')
 const menuBuilder = require('./electron/menu')
 const ipc = require('./electron/ipc')
@@ -23,11 +24,18 @@ async function createWindow () {
 
   // https://www.electronjs.org/docs/tutorial/security#3-enable-context-isolation-for-remote-content
   // Create the browser window.
-  win = new BrowserWindow({
+  global.mainWindow = win = new BrowserWindow({
     // width: 1200,
     // height: 700,
     width: width / 2,
     height: height / 1.2,
+    title: 'APP',
+    frame: false,
+    movable: true,
+    minimizable: false,
+    maximizable: false,
+    resizable: false,
+    fullscreenable: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       // webSecurity: true, // 开启跨域限制
@@ -78,9 +86,9 @@ async function createWindow () {
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
     // if (!process.env.IS_TEST) win.webContents.openDevTools()
   } else {
-    createProtocol('app')
+    createProtocol(SCHEME)
     // Load the index.html when not in development
-    win.loadURL('app://./index.html')
+    win.loadURL(LOAD_URL)
   }
   // 将 win 置为 null，释放占用内存
   win.on('closed', () => {
@@ -124,8 +132,8 @@ app.on('ready', async () => {
     }
   }
   createWindow()
-  // 自动更新
-  autoUpdater.checkForUpdatesAndNotify()
+  // // 自动更新
+  // autoUpdater.checkForUpdatesAndNotify()
 })
 
 // Exit cleanly on request from parent process in development mode.

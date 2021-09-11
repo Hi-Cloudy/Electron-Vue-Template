@@ -31,5 +31,24 @@ const registerMessage = () => {
       icon: path.join(__dirname, fileName)
     })
   })
+
+  ipcMain.on('window-min', () => {
+    global.mainWindow.minimize()
+  })
+
+  ipcMain.on('window-max', () => {
+    if (global.mainWindow.isMaximized()) {
+      global.mainWindow.restore()
+    } else {
+      global.mainWindow.maximize()
+    }
+  })
+
+  ipcMain.on('window-close', () => {
+    const wins = BrowserWindow.getAllWindows()
+    for (let i = 0; i < wins.length; i++) {
+      wins[i].close()
+    }
+  })
 }
 module.exports.registerMessage = registerMessage

@@ -14,10 +14,11 @@ const port = 8520
 
 module.exports = {
   publicPath: './',
+  productionSourceMap: true,
   devServer: {
     host: '0.0.0.0',
     port: port,
-    open: true,
+    // open: true,
     overlay: {
       warnings: false,
       errors: true

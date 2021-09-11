@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <frame-action></frame-action>
     <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
@@ -9,9 +10,13 @@
   </div>
 </template>
 <script>
+import FrameAction from './components/Header/FrameAction'
 export default {
   data () {
     return {}
+  },
+  components: {
+    FrameAction
   },
   mounted () {
     // renderer
@@ -33,6 +38,7 @@ export default {
 }
 </script>
 <style lang="scss">
+@import url('./styles/normalize');
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

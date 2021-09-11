@@ -22,7 +22,7 @@ const flatten = (obj) => Object.keys(obj)
 contextBridge.exposeInMainWorld('electron', {
   // ipcRenderer: ipcRenderer,
   send: (channel, data) => {
-    const validChannels = ['toMain', 'show-context-menu', 'ondragstart']
+    const validChannels = ['toMain', 'show-context-menu', 'ondragstart', 'window-min', 'window-max', 'window-close']
     if (validChannels.includes(channel)) {
       ipcRenderer.send(channel, data)
     }

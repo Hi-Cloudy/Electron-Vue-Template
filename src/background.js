@@ -2,7 +2,7 @@
 
 import { app, protocol, BrowserWindow, globalShortcut, screen } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
-import { SCHEME, LOAD_URL } from './electron/config'
+import config from './electron/config'
 // import { autoUpdater } from 'electron-updater'
 const path = require('path')
 const menuBuilder = require('./electron/menu')
@@ -21,7 +21,6 @@ protocol.registerSchemesAsPrivileged([
 
 async function createWindow () {
   const { width, height } = screen.getPrimaryDisplay().workAreaSize
-
   // https://www.electronjs.org/docs/tutorial/security#3-enable-context-isolation-for-remote-content
   // Create the browser window.
   global.mainWindow = win = new BrowserWindow({
@@ -31,6 +30,7 @@ async function createWindow () {
     height: height / 1.2,
     title: 'APP',
     frame: false,
+    useContentSize: true,
     movable: true,
     minimizable: false,
     maximizable: false,
@@ -86,9 +86,9 @@ async function createWindow () {
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
     // if (!process.env.IS_TEST) win.webContents.openDevTools()
   } else {
-    createProtocol(SCHEME)
+    createProtocol(config.get().app.scheme)
     // Load the index.html when not in development
-    win.loadURL(LOAD_URL)
+    win.loadURL(config.get().app.loadURL)
   }
   // 将 win 置为 null，释放占用内存
   win.on('closed', () => {
@@ -131,6 +131,8 @@ app.on('ready', async () => {
       console.error('Vue Devtools failed to install:', e.toString())
     }
   }
+  // 加载配置
+  config.reload()
   createWindow()
   // // 自动更新
   // autoUpdater.checkForUpdatesAndNotify()

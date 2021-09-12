@@ -17,6 +17,8 @@
   "dependencies": {
     "core-js": "^3.8.3",
     "electron-updater": "^4.3.9",
+    "json5": "^2.2.0",
+    "lodash": "^4.17.21",
     "vue": "^2.6.11",
     "vue-router": "^3.5.1",
     "vuex": "^3.6.2"

@@ -1,12 +1,17 @@
 <template>
   <div id="app">
-    <frame-action></frame-action>
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+
+    <div class="app-container">
+      <frame-action></frame-action>
+      <section class="app-main-container">
+        <div id="nav">
+          <router-link to="/">Home</router-link> |
+          <router-link to="/about">About</router-link>
+        </div>
+        <div @dragstart="dragStart" style="border:2px solid black;border-radius:3px;padding:5px;display:inline-block" draggable="true">Drag me</div>
+        <router-view />
+      </section>
     </div>
-    <div @dragstart="dragStart" style="border:2px solid black;border-radius:3px;padding:5px;display:inline-block" draggable="true">Drag me</div>
-    <router-view />
   </div>
 </template>
 <script>

@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-
     <div class="app-container">
       <frame-action></frame-action>
       <section class="app-main-container">
@@ -50,6 +49,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  height: 100%;
 }
 
 #nav {
@@ -67,5 +67,15 @@ export default {
 .drag {
   -webkit-app-region: drag;
   user-select: none;
+}
+.app-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  .app-main-container {
+    border-top: 1px solid #f0f2f3;
+    flex: auto;
+    overflow: auto;
+  }
 }
 </style>

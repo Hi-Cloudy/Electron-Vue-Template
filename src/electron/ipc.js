@@ -1,4 +1,4 @@
-const { ipcMain, Menu, BrowserWindow } = require('electron')
+const { ipcMain, Menu, BrowserWindow, app } = require('electron')
 const path = require('path')
 const registerMessage = () => {
   ipcMain.on('show-context-menu', (event) => {
@@ -47,8 +47,10 @@ const registerMessage = () => {
   ipcMain.on('window-close', () => {
     const wins = BrowserWindow.getAllWindows()
     for (let i = 0; i < wins.length; i++) {
+      wins[i].hide()
       wins[i].close()
     }
+    app.exit()
   })
 }
 module.exports.registerMessage = registerMessage

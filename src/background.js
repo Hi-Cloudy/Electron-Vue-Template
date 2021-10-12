@@ -36,6 +36,7 @@ async function createWindow () {
     maximizable: false,
     resizable: false,
     fullscreenable: false,
+    transparent: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       // webSecurity: true, // 开启跨域限制
